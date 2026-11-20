@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drug Guesser – Guess the mystery drug.</title>
+<style>
+:root{--bg:#f6f7f9;--fg:#1c2028;--card:#fff;--mut:#6b7280;--ok:#2e9e5b;--no:#8a909c;--bd:#d9dde3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171d;--fg:#e8eaee;--card:#1d222b;--mut:#9aa1ad;--ok:#2f8f58;--no:#444b57;--bd:#2c323d}}
+:root[data-theme="dark"]{--bg:#14171d;--fg:#e8eaee;--card:#1d222b;--mut:#9aa1ad;--ok:#2f8f58;--no:#444b57;--bd:#2c323d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.4}
+main{max-width:1120px;width:100%;margin:0 auto;padding:16px clamp(16px,3vw,40px)}
+h1{margin:0;font-size:1.7rem;letter-spacing:.5px}
+.sub{color:var(--mut);font-size:.9rem;margin:2px 0 14px}
+.bar{display:flex;gap:8px;flex-wrap:wrap}
+input{flex:1;min-width:200px;padding:10px 12px;font-size:1rem;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg)}
+button{padding:10px 16px;font-size:1rem;border:0;border-radius:8px;background:var(--ok);color:#fff;cursor:pointer}
+button.alt{background:var(--no)}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--mut);font-size:.9rem;margin:10px 0}
+#flags{display:flex;gap:14px}
+.fl{display:inline-flex;align-items:center;gap:6px}
+.fl i{width:16px;height:16px;border-radius:4px;background:var(--no);display:inline-block}
+.fl i.y{background:var(--ok)}
+.wrap{overflow-x:auto}
+.row{display:grid;grid-template-columns:140px repeat(7,minmax(86px,1fr));gap:4px;margin-bottom:4px}
+.row>div{padding:8px 4px;border-radius:6px;text-align:center;font-size:.8rem;display:flex;align-items:center;justify-content:center;min-height:44px;color:#fff;background:var(--no)}
+.row>div small{display:none}
+.row.h>div{background:none;color:var(--mut);font-weight:600;min-height:0;padding:2px}
+.row>div.n{background:var(--card);color:var(--fg);border:1px solid var(--bd);font-weight:600}
+.row>div.ok{background:var(--ok)}
+#msg{margin:12px 0;padding:12px;border-radius:8px;background:var(--card);border:1px solid var(--bd);display:none}
+#sug{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+#sug button{background:var(--card);color:var(--fg);border:1px solid var(--bd);padding:6px 12px;font-size:.9rem}
+details{margin-top:16px;color:var(--mut);font-size:.85rem}
+.key span{display:inline-block;width:12px;height:12px;border-radius:3px;margin:0 4px 0 10px;vertical-align:middle}
+/* Mobile layout: each guess becomes a card with large labelled tiles */
+@media(max-width:720px){
+main{padding:12px}
+h1{font-size:1.4rem}
+.bar input{flex:1 1 100%;min-width:0;padding:14px 12px;font-size:1.05rem}
+.bar button{flex:1;padding:14px 10px}
+#sug button{flex:1;padding:12px 8px;font-size:1rem}
+.meta{flex-wrap:wrap;justify-content:flex-start;gap:8px 12px;font-size:.8rem}
+#left{flex:1 1 100%}
+#flags{gap:12px}
+.fl i,.key span{width:16px;height:16px;border-radius:4px}
+.key span{margin:0 5px 0 0}
+.key span+span{margin-left:10px}
+.row.h{display:none}
+.row{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;padding:8px;background:var(--card);border:1px solid var(--bd);border-radius:12px}
+.row>div{flex-direction:column;min-height:62px;font-size:1rem;font-weight:600;padding:8px 6px}
+.row>div small{display:block;font-size:.66rem;font-weight:500;opacity:.85;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.row>div.n{grid-column:1/-1;background:none;border:0;min-height:0;padding:2px 4px;font-size:1.2rem;align-items:flex-start}
+.row>div.n small{display:none}
+}
+</style></head><body><main>
+<h1>💊 Drug Guesser</h1>
+<div class="sub">Guess the mystery drug.</div>
+<div class="bar"><input id="in" placeholder="Type a substance name…" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Guess</button><button class="alt" id="new">Play again</button></div>
+<div id="sug"></div>
+<div class="meta"><span id="left"></span><span id="flags"></span><span class="key"><span style="background:var(--ok)"></span>match<span style="background:var(--no)"></span>no match</span></div>
+<div id="msg"></div>
+<div class="wrap"><div class="row h"><div>Substance</div><div>Effect</div><div>Hallucinogenic</div><div>Molecule size</div><div>Addiction</div><div>Duration</div><div>Chemical class</div><div>Mechanism</div></div><div id="board"></div></div>
+<details><summary>How the categories are defined</summary>
+<p><b>Effect:</b> sedating or stimulating effect on a five-step scale: very sedating, mildly sedating, neutral, mildly stimulating, very stimulating. It applies to every drug, so psychedelics and dissociatives are placed too (e.g. ketamine sedating, LSD mildly stimulating). <b>Hallucinogenic:</b> not, mildly (e.g. MDMA, cannabis, DXM) or very (classic psychedelics, dissociatives, deliriants). <b>Molecule size:</b> small (below ~250 g/mol), medium (~250–340) or large (above ~340). <b>Basic nitrogen:</b> contains an amine-type nitrogen that can be protonated. <b>Analogue:</b> a modified or designer derivative of an established parent compound, such as substituted tryptamines and phenethylamines (4-HO-MET, 2C-I), cathinones, novel dissociatives (3-MeO-PCP) and GABA analogues. The parent drugs themselves (amphetamine, methamphetamine, PCP, DMT, LSD and so on) are not analogues. The two yes/no traits, basic nitrogen and analogue, appear as small squares after your first guess: green means the mystery substance has the trait, gray means it doesn’t. <b>Addiction:</b> low, medium or high potential. <b>Duration:</b> total effect length (&lt;1h, 1–6h, 6–12h+). <b>Chemical class</b> is the structural family (e.g. morphinan, benzodiazepine, barbiturate, tryptamine). <b>Mechanism</b> is the main pharmacological action, shown as an extra clue.</p>
+<p>Values were compiled from general knowledge of PsychonautWiki-style profiles and are simplified for gameplay. Check psychonautwiki.org for full details. For education only, not drug-use advice.</p></details>
+<script>
+// name|effect(-2..2)|halluc(0-2)|size(0-2)|basicN|analogue|addiction(0-2)|duration(0-2)|class|mechanism
+const RAW=`Psilocybin|-1|2|1|1|0|0|1|Tryptamine|Serotonergic
+LSD|1|2|2|1|0|0|2|Ergoline|Serotonergic
+Mescaline|1|2|0|1|0|0|2|Phenethylamine|Serotonergic
+DMT|-1|2|1|1|0|0|0|Tryptamine|Serotonergic
+1P-LSD|1|2|2|1|1|0|2|Ergoline|Serotonergic
+LSA|-1|2|2|1|0|0|2|Ergoline|Serotonergic
+AL-LAD|1|2|2|1|1|0|2|Ergoline|Serotonergic
+aMT|2|2|1|1|1|0|2|Tryptamine|Serotonergic
+DET|0|2|1|1|1|0|1|Tryptamine|Serotonergic
+DiPT|0|1|1|1|1|0|1|Tryptamine|Serotonergic
+4-AcO-DMT|0|2|1|1|1|0|1|Tryptamine|Serotonergic
+4-HO-MET|-1|2|1|1|1|0|1|Tryptamine|Serotonergic
+Bufotenin|0|1|1|1|0|0|1|Tryptamine|Serotonergic
+Ibogaine|1|2|2|1|0|0|2|Indole alkaloid|Serotonergic
+2C-B|1|2|1|1|1|0|1|Phenethylamine|Serotonergic
+2C-D|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
+2C-I|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
+2C-T-7|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
+2C-B-FLY|1|2|1|1|1|0|2|Benzodifuran|Serotonergic
+DOM|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic
+DOI|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic
+DOC|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic
+Bromo-DragonFLY|1|2|1|1|1|0|2|Benzodifuran|Serotonergic
+25C-NBOH|1|2|1|1|1|0|1|Phenethylamine|Serotonergic
+25B-NBOH|1|2|1|1|1|0|1|Phenethylamine|Serotonergic
+25C-NBOMe|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
+25I-NBOMe|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
+Alprazolam|-2|0|2|0|0|2|1|Benzodiazepine|GABAergic
+Clonazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic
+Diazepam|-2|0|2|0|0|1|2|Benzodiazepine|GABAergic
+Flunitrazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic
+Lorazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic
+Midazolam|-2|0|2|0|0|1|1|Benzodiazepine|GABAergic
+Etizolam|-2|0|2|0|1|2|1|Benzodiazepine|GABAergic
+Phenobarbital|-2|0|1|0|0|2|2|Barbiturate|GABAergic
+Gaboxadol|-2|1|0|1|1|0|1|Isoxazole|GABAergic
+Muscimol|-1|2|0|1|0|0|1|Isoxazole|GABAergic
+Zolpidem|-2|0|2|0|0|1|1|Z-drug|GABAergic
+Zopiclone|-2|0|2|1|0|1|1|Z-drug|GABAergic
+Baclofen|-2|0|1|1|1|0|1|GABA analogue|GABAergic
+Phenibut|-2|0|1|1|1|2|2|GABA analogue|GABAergic
+GHB|-1|0|0|0|0|2|1|Hydroxy acid|GABAergic
+GBL|-1|0|0|0|1|2|1|Lactone|GABAergic
+Kava|-1|0|1|0|0|0|1|Kavalactone|GABAergic
+Methaqualone|-2|0|1|0|0|2|1|Quinazolinone|GABAergic
+Gabapentin|-1|0|0|1|1|0|2|GABA analogue|Ca-channel
+Pregabalin|-1|0|0|1|1|0|2|GABA analogue|Ca-channel
+Codeine|-1|0|2|1|0|2|1|Morphinan|Opioid
+Diacetylmorphine (Heroin)|-2|0|2|1|0|2|1|Morphinan|Opioid
+Fentanyl|-2|0|2|1|0|2|1|Phenylpiperidine|Opioid
+Hydrocodone|-2|0|2|1|0|2|1|Morphinan|Opioid
+Hydromorphone|-2|0|2|1|0|2|1|Morphinan|Opioid
+Kratom|0|0|2|1|0|1|1|Indole alkaloid|Opioid
+Methadone|-2|0|1|1|0|2|2|Diphenylpropylamine|Opioid
+Morphine|-2|0|2|1|0|2|1|Morphinan|Opioid
+Tramadol|-1|0|1|1|0|1|1|Aminocyclohexanol|Opioid
+U-47700|-2|0|1|1|1|2|1|Benzamide|Opioid
+Tianeptine|1|0|2|1|0|2|1|Tricyclic|Opioid
+Mirtazapine|-2|0|1|1|0|0|2|Tetracyclic|5-HT/alpha-2 antagonist
+Diphenhydramine|-2|1|1|1|0|0|1|Ethanolamine|Antihistamine
+Cannabis|-1|1|1|0|0|1|1|Cannabinoid|Cannabinoid
+Datura|-1|2|2|1|0|0|2|Tropane alkaloid|Anticholinergic
+Salvia (salvinorin A)|0|2|2|0|0|0|0|Diterpenoid|Kappa agonist
+Ketamine|-2|2|1|1|0|1|1|Arylcyclohexylamine|NMDA antagonist
+Methoxetamine (MXE)|-1|2|1|1|1|0|1|Arylcyclohexylamine|NMDA antagonist
+PCP|1|2|2|1|0|1|2|Arylcyclohexylamine|NMDA antagonist
+DCK|-1|2|1|1|1|1|1|Arylcyclohexylamine|NMDA antagonist
+2FDCK|-1|2|1|1|1|1|1|Arylcyclohexylamine|NMDA antagonist
+DXM|-1|1|1|1|0|0|2|Morphinan|NMDA antagonist
+Memantine|0|1|0|1|0|0|2|Adamantane|NMDA antagonist
+Nitrous oxide|-2|1|0|0|0|0|0|Inorganic gas|NMDA antagonist
+Xenon|-2|1|0|0|0|0|0|Noble gas|NMDA antagonist
+Amphetamine|2|0|0|1|0|2|2|Substituted amphetamine|Monoamine releaser
+2-FMA|2|0|0|1|1|1|1|Substituted amphetamine|Monoamine releaser
+Methamphetamine|2|0|0|1|0|2|2|Substituted amphetamine|Monoamine releaser
+Lisdexamphetamine|2|0|1|1|1|1|2|Substituted amphetamine|Monoamine releaser
+3-FPM|2|0|0|1|1|1|1|Phenmetrazine|Monoamine releaser
+Methylphenidate|2|0|1|1|0|1|1|Phenidate|Reuptake inhibitor
+Ethylphenidate|2|0|1|1|1|1|1|Phenidate|Reuptake inhibitor
+3-MMC|2|0|0|1|1|2|1|Cathinone|Monoamine releaser
+Cathinone|2|0|0|1|0|1|1|Cathinone|Monoamine releaser
+Methcathinone|2|0|0|1|1|2|1|Cathinone|Monoamine releaser
+a-PVP|2|0|1|1|1|2|1|Cathinone|Reuptake inhibitor
+MDPV|2|0|1|1|1|2|1|Cathinone|Reuptake inhibitor
+Cocaine|2|0|1|1|0|2|1|Tropane alkaloid|Reuptake inhibitor
+Caffeine|1|0|0|0|0|1|1|Xanthine|Adenosine antagonist
+Nicotine|1|0|0|1|0|2|0|Pyridine alkaloid|Nicotinic agonist
+Propylhexedrine|1|0|0|1|1|1|1|Cycloalkylamine|Monoamine releaser
+JWH-018|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid
+JWH-073|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid
+Alkyl nitrates|-1|0|0|1|0|0|0|Nitrite ester|Vasodilator
+MDMA|2|1|0|1|0|1|1|Substituted amphetamine|Monoamine releaser`;
+const D=RAW.split("\n").map(l=>{const p=l.split("|");return{name:p[0],ef:+p[1],hl:+p[2],sz:+p[3],n:p[4]=="1",ana:p[5]=="1",ad:+p[6],dur:+p[7],cls:p[8],mech:p[9]}});
+const DUR=["<1h","1–6h","6–12h+"],MAX=7;
+let target,guesses,over,isDaily=true;
+const $=id=>document.getElementById(id);
+function dailyIndex(){const n=new Date(),s=n.getFullYear()+"-"+(n.getMonth()+1)+"-"+n.getDate();let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}let t=(h>>>0)+0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)%D.length}
+function start(daily){isDaily=!!daily;target=isDaily?D[dailyIndex()]:D[Math.floor(Math.random()*D.length)];$("new").style.display="none";guesses=[];over=false;$("board").innerHTML="";$("msg").style.display="none";$("in").value="";$("in").disabled=false;upd();sugg()}
+function upd(){$("left").textContent=(isDaily?"Daily puzzle · ":"Practice game · ")+`Guesses left: ${MAX-guesses.length}`;
+const f=$("flags");f.innerHTML="";if(guesses.length)[["Basic nitrogen",target.n],["Analogue",target.ana]].forEach(([l,v])=>{const s=document.createElement("span");s.className="fl";s.title=l+": "+(v?"yes":"no");const i=document.createElement("i");if(v)i.className="y";s.append(i,l);f.appendChild(s)})}
+function cell(lab,t,ok){const e=document.createElement("div");if(ok)e.className="ok";const s=document.createElement("small");s.textContent=lab;e.append(s,t);return e}
+function find(v){v=v.trim().toLowerCase();const x=D.filter(d=>d.name.toLowerCase().includes(v));return D.find(d=>d.name.toLowerCase()==v)||D.find(d=>d.name.toLowerCase().startsWith(v)&&v.length>1)||(v.length>1&&x.length==1?x[0]:null)}
+function lev(a,b){const m=[];for(let i=0;i<=a.length;i++){m[i]=[i];for(let j=1;j<=b.length;j++)m[i][j]=i?0:j}for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]==b[j-1]?0:1));return m[a.length][b.length]}
+function closest(v){v=v.trim().toLowerCase();if(v.length<3)return null;let best=null,bd=99;for(const d of D){const full=d.name.toLowerCase(),base=full.split(" (")[0];const k=Math.min(lev(v,full),lev(v,base));if(k<bd){bd=k;best=d}}return bd<=Math.max(1,Math.floor(v.length/3))?best:null}
+function say(h){const m=$("msg");m.innerHTML=h;m.style.display="block"}
+function guess(){
+  if(over)return;
+  const g=find($("in").value);
+  if(!g){const s=closest($("in").value);if(s){$("in").value=s.name;say(`Did you mean <b>${s.name}</b>? Press Enter again to confirm, or edit the text.`);return}say("Substance not found. Check the spelling (e.g. “oxycodone”, “2C-B”).");return}
+  if(guesses.includes(g)){say(`You already guessed ${g.name}.`);return}
+  $("msg").style.display="none";guesses.push(g);
+  const r=document.createElement("div");r.className="row";
+  const n=document.createElement("div");n.className="n";n.textContent=g.name;
+  r.append(n,
+    cell("Effect",["Very sedating","Mildly sedating","Neutral","Mildly stimulating","Very stimulating"][g.ef+2],g.ef==target.ef),
+    cell("Hallucinogenic",["Not hallucinogenic","Mildly hallucinogenic","Very hallucinogenic"][g.hl],g.hl==target.hl),
+    cell("Molecule size",["Small","Medium","Large"][g.sz],g.sz==target.sz),
+    cell("Addiction",["Low","Medium","High"][g.ad],g.ad==target.ad),
+    cell("Duration",DUR[g.dur],g.dur==target.dur),
+    cell("Chemical class",g.cls,g.cls==target.cls),
+    cell("Mechanism",g.mech,g.mech==target.mech));
+  $("board").prepend(r);$("in").value="";upd();sugg();
+  if(g==target){over=true;say(`🎉 Correct! It was <b>${target.name}</b>, found in ${guesses.length} guess${guesses.length>1?"es":""}.`)}
+  else if(guesses.length>=MAX){over=true;say(`Out of guesses. The answer was <b>${target.name}</b> (${target.mech}).`)}
+  if(over){$("in").disabled=true;$("new").style.display="";if(isDaily)$("msg").innerHTML+="<br>That was today’s puzzle. A new one arrives tomorrow, or press Play again for a random one."}
+}
+function sugg(){const v=$("in").value.trim().toLowerCase(),s=$("sug");s.innerHTML="";if(!v)return;
+const sc=D.filter(d=>!guesses.includes(d)).map(d=>{const n=d.name.toLowerCase(),b=n.split(" (")[0];return[n.startsWith(v)?0:n.includes(v)?1:2+Math.min(lev(v,n.slice(0,v.length)),lev(v,b)),d]}).sort((a,b)=>a[0]-b[0]||a[1].name.length-b[1].name.length).slice(0,3);
+sc.forEach(([k,d])=>{const e=document.createElement("button");e.textContent=d.name;e.onclick=()=>{$("in").value=d.name;sugg();$("in").focus()};s.appendChild(e)})}
+$("in").addEventListener("input",sugg);
+$("go").onclick=guess;$("new").onclick=()=>start(false);
+$("in").addEventListener("keydown",e=>{if(e.key=="Enter")guess()});
+start(true);
+</script></main></body></html>
