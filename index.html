@@ -56,7 +56,7 @@ h1{font-size:1.4rem}
 
 /* ---- Deep theme + animations ---- */
 :root:root:root{--bg:#0a0a1f;--fg:#ecebff;--card:rgba(255,255,255,.06);--mut:#a3a3c8;--ok:#10b981;--no:#2b2d55;--bd:rgba(167,139,250,.22);--acc:#a78bfa;--acc2:#22d3ee}
-body{background:radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),radial-gradient(ellipse 70% 45% at 95% 15%,#0b5a78 0,transparent 55%),#0a0a1f;background-attachment:fixed;min-height:100vh}
+body{background:radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),#0a0a1f;background-attachment:fixed;min-height:100vh}
 body::before,body::after{content:"";position:fixed;z-index:-1;width:46vmax;height:46vmax;border-radius:50%;filter:blur(90px);opacity:.28;pointer-events:none;animation:drift 22s ease-in-out infinite alternate}
 body::before{background:#7c3aed;top:-18vmax;left:-12vmax}
 body::after{background:#06b6d4;bottom:-20vmax;right:-14vmax;animation-delay:-9s}
@@ -219,7 +219,7 @@ function guess(){
     cell("Chemical class",g.cls,g.cls==target.cls),
     cell("Mechanism",g.mech,g.mech==target.mech));
   [...r.children].forEach((c,i)=>c.style.animationDelay=i*80+"ms");$("board").prepend(r);$("in").value="";upd();sugg();
-  if(g!=target&&["ef","hl","sz","n","ana","ad","dur","cls","mech"].every(k=>g[k]==target[k])){const o=$("oxmsg"),k=target.ox;o.textContent=`Every trait matches, but the mystery drug isn’t ${g.name}. It contains ${k==0?"no oxygen atoms":k+" oxygen atom"+(k==1?"":"s")}.`;o.style.display="block"}
+  if(g!=target&&["ef","hl","sz","n","ana","ad","dur","cls","mech"].every(k=>g[k]==target[k])){const o=$("oxmsg"),k=target.ox;o.textContent=`${k} oxygen atoms`;o.style.display="block"}
   if(g==target){r.classList.add("win");confetti();over=true;say(`🎉 Correct! It was <b>${target.name}</b>, found in ${guesses.length} guess${guesses.length>1?"es":""}.`)}
   else if(guesses.length>=MAX){over=true;say(`Out of guesses. The answer was <b>${target.name}</b> (${target.mech}).`)}
   if(over){$("in").disabled=true;$("new").style.display="";if(isDaily)$("msg").innerHTML+="<br>That was today’s puzzle. A new one arrives tomorrow, or press Play again for a random one."}
