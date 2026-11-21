@@ -53,8 +53,50 @@ h1{font-size:1.4rem}
 .row>div.n{grid-column:1/-1;background:none;border:0;min-height:0;padding:2px 4px;font-size:1.2rem;align-items:flex-start}
 .row>div.n small{display:none}
 }
-</style></head><body><main>
-<h1>💊 Drug Guesser</h1>
+
+/* ---- Deep theme + animations ---- */
+:root:root:root{--bg:#0a0a1f;--fg:#ecebff;--card:rgba(255,255,255,.06);--mut:#a3a3c8;--ok:#10b981;--no:#2b2d55;--bd:rgba(167,139,250,.22);--acc:#a78bfa;--acc2:#22d3ee}
+body{background:radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),radial-gradient(ellipse 70% 45% at 95% 15%,#0b5a78 0,transparent 55%),#0a0a1f;background-attachment:fixed;min-height:100vh}
+body::before,body::after{content:"";position:fixed;z-index:-1;width:46vmax;height:46vmax;border-radius:50%;filter:blur(90px);opacity:.28;pointer-events:none;animation:drift 22s ease-in-out infinite alternate}
+body::before{background:#7c3aed;top:-18vmax;left:-12vmax}
+body::after{background:#06b6d4;bottom:-20vmax;right:-14vmax;animation-delay:-9s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes flip{from{opacity:0;transform:rotateX(-90deg) translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes bump{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes pop{40%{transform:scale(1.03);filter:drop-shadow(0 0 18px #10b981)}}
+@keyframes shine{to{background-position:-200% 0}}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+main>*{animation:rise .6s both}
+.sub{animation-delay:.08s}.bar{animation-delay:.16s}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{background:linear-gradient(90deg,#c4b5fd,#22d3ee,#c4b5fd);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite;font-weight:800}
+.priv{flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:12px;color:var(--fg);background:var(--card);border:1px solid var(--bd);backdrop-filter:blur(8px);transition:transform .25s,box-shadow .25s,color .25s}
+.priv:hover{transform:translateY(-2px) rotate(-6deg);color:var(--acc2);box-shadow:0 0 18px rgba(34,211,238,.45)}
+input{background:rgba(255,255,255,.06);transition:border-color .2s,box-shadow .2s}
+input:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 3px rgba(167,139,250,.25),0 0 24px rgba(167,139,250,.2)}
+button{background:linear-gradient(135deg,#7c3aed,#0891b2);box-shadow:0 4px 18px rgba(124,58,237,.35);transition:transform .15s,box-shadow .2s,filter .2s}
+button:hover{transform:translateY(-2px);filter:brightness(1.12)}
+button:active{transform:scale(.97)}
+button.alt{background:linear-gradient(135deg,#334155,#475569);box-shadow:none}
+#sug button{background:var(--card);backdrop-filter:blur(6px);box-shadow:none;animation:bump .25s both}
+#msg{backdrop-filter:blur(8px)}
+.fl i{animation:bump .4s both;box-shadow:0 0 10px rgba(255,255,255,.08)}
+.fl i.y{box-shadow:0 0 12px rgba(16,185,129,.6)}
+.row:not(.h){perspective:700px;animation:rise .4s both}
+.row:not(.h)>div{animation:flip .6s cubic-bezier(.2,.8,.25,1) both;transform-origin:50% 0;border:1px solid rgba(255,255,255,.07);transition:filter .2s}
+.row:not(.h)>div:hover{filter:brightness(1.15)}
+.row>div.ok{background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 0 16px rgba(16,185,129,.35);border-color:rgba(255,255,255,.18)}
+.row.win{animation:pop .9s ease}
+details{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 14px}
+summary{cursor:pointer;color:var(--fg)}
+.cf{position:fixed;top:-14px;width:8px;height:14px;border-radius:2px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@media(min-width:721px){.row>div.n{background:var(--card);backdrop-filter:blur(6px)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<meta name="theme-color" content="#0a0a1f">
+</head><body><main>
+<header class="top"><h1>💊 Drug Guesser</h1><a class="priv" href="privacy.html" aria-label="Privacy policy" title="Privacy policy"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8.4-8 9-4.8-.6-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></a></header>
 <div class="sub">Guess the mystery drug. For educational purposes only.</div>
 <div class="bar"><input id="in" placeholder="Type a substance name…" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Guess</button><button class="alt" id="new">Play again</button></div>
 <div id="sug"></div>
@@ -187,11 +229,12 @@ function guess(){
     cell("Duration",DUR[g.dur],g.dur==target.dur),
     cell("Chemical class",g.cls,g.cls==target.cls),
     cell("Mechanism",g.mech,g.mech==target.mech));
-  $("board").prepend(r);$("in").value="";upd();sugg();
-  if(g==target){over=true;say(`🎉 Correct! It was <b>${target.name}</b>, found in ${guesses.length} guess${guesses.length>1?"es":""}.`)}
+  [...r.children].forEach((c,i)=>c.style.animationDelay=i*80+"ms");$("board").prepend(r);$("in").value="";upd();sugg();
+  if(g==target){r.classList.add("win");confetti();over=true;say(`🎉 Correct! It was <b>${target.name}</b>, found in ${guesses.length} guess${guesses.length>1?"es":""}.`)}
   else if(guesses.length>=MAX){over=true;say(`Out of guesses. The answer was <b>${target.name}</b> (${target.mech}).`)}
   if(over){$("in").disabled=true;$("new").style.display="";if(isDaily)$("msg").innerHTML+="<br>That was today’s puzzle. A new one arrives tomorrow, or press Play again for a random one."}
 }
+function confetti(){const c=["#a78bfa","#22d3ee","#10b981","#f472b6","#fbbf24"];for(let i=0;i<48;i++){const p=document.createElement("i");p.className="cf";p.style.cssText=`left:${Math.random()*100}vw;background:${c[i%5]};animation-delay:${Math.random()*.4}s;animation-duration:${1.6+Math.random()*1.4}s`;document.body.appendChild(p);setTimeout(()=>p.remove(),3500)}}
 function sugg(){const v=$("in").value.trim().toLowerCase(),s=$("sug");s.innerHTML="";if(!v)return;
 const sc=D.filter(d=>!guesses.includes(d)).map(d=>{const n=d.name.toLowerCase(),b=n.split(" (")[0];return[n.startsWith(v)?0:n.includes(v)?1:2+Math.min(lev(v,n.slice(0,v.length)),lev(v,b)),d]}).sort((a,b)=>a[0]-b[0]||a[1].name.length-b[1].name.length).slice(0,3);
 sc.forEach(([k,d])=>{const e=document.createElement("button");e.textContent=d.name;e.onclick=()=>{$("in").value=d.name;sugg();$("in").focus()};s.appendChild(e)})}
