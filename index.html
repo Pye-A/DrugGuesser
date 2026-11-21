@@ -109,8 +109,8 @@ summary{cursor:pointer;color:var(--fg)}
 <p>Values were compiled from general knowledge from PsychonautWiki and are simplified for gameplay. Check psychonautwiki.org for full details. For education only, not drug-use advice.</p></details>
 <script>
 // name|effect(-2..2)|halluc(0-2)|size(0-2)|basicN|analogue|addiction(0-2)|duration(0-2)|class|mechanism|oxygen
-const RAW=`Psilocybin|-1|2|1|1|0|0|1|Tryptamine|Serotonergic|4
-LSD|1|2|2|1|0|0|2|Ergoline|Serotonergic|1
+const RAW=`Psilocybin (mushrooms)|-1|2|1|1|0|0|1|Tryptamine|Serotonergic|4
+LSD (acid)|1|2|2|1|0|0|2|Ergoline|Serotonergic|1
 Mescaline|1|2|0|1|0|0|2|Phenethylamine|Serotonergic|3
 DMT|-1|2|1|1|0|0|0|Tryptamine|Serotonergic|0
 1P-LSD|1|2|2|1|1|0|2|Ergoline|Serotonergic|2
@@ -122,17 +122,17 @@ DiPT|0|1|1|1|1|0|1|Tryptamine|Serotonergic|0
 4-AcO-DMT|0|2|1|1|1|0|1|Tryptamine|Serotonergic|2
 4-HO-MET|-1|2|1|1|1|0|1|Tryptamine|Serotonergic|1
 Bufotenin|0|1|1|1|0|0|1|Tryptamine|Serotonergic|1
-Ibogaine|1|2|2|1|0|0|2|Indole alkaloid|Serotonergic|1
+Ibogaine (Iboga)|1|2|2|1|0|0|2|Indole alkaloid|Serotonergic|1
 2C-B|1|2|1|1|1|0|1|Phenethylamine|Serotonergic|2
 2C-D|1|2|1|1|1|0|2|Phenethylamine|Serotonergic|2
 DOM|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic|2
 Bromo-DragonFLY|1|2|1|1|1|0|2|Benzodifuran|Serotonergic|2
 25C-NBOH|1|2|1|1|1|0|1|Phenethylamine|Serotonergic|3
 25C-NBOMe|1|2|1|1|1|0|2|Phenethylamine|Serotonergic|3
-Alprazolam|-2|0|2|0|0|2|1|Benzodiazepine|GABAergic|0
-Clonazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|3
-Diazepam|-2|0|2|0|0|1|2|Benzodiazepine|GABAergic|1
-Lorazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|2
+Alprazolam (Xanax)|-2|0|2|0|0|2|1|Benzodiazepine|GABAergic|0
+Clonazepam (Klonopin)|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|3
+Diazepam (Valium)|-2|0|2|0|0|1|2|Benzodiazepine|GABAergic|1
+Lorazepam (Ativan)|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|2
 Midazolam|-2|0|2|0|0|1|1|Benzodiazepine|GABAergic|0
 Etizolam|-2|0|2|0|1|2|1|Benzodiazepine|GABAergic|0
 Phenobarbital|-2|0|1|0|0|2|2|Barbiturate|GABAergic|3
@@ -145,13 +145,13 @@ Phenibut|-2|0|1|1|1|2|2|GABA analogue|GABAergic|2
 GHB|-1|0|0|0|0|2|1|Hydroxy acid|GABAergic|3
 GBL|-1|0|0|0|1|2|1|Lactone|GABAergic|2
 Kava|-1|0|1|0|0|0|1|Kavalactone|GABAergic|3
-Methaqualone|-2|0|1|0|0|2|1|Quinazolinone|GABAergic|1
+Methaqualone (Quaalude)|-2|0|1|0|0|2|1|Quinazolinone|GABAergic|1
 Gabapentin|-1|0|0|1|1|0|2|GABA analogue|Ca-channel|2
-Codeine|-1|0|2|1|0|2|1|Morphinan|Opioid|3
+Codeine |-1|0|2|1|0|2|1|Morphinan|Opioid|3
 Diacetylmorphine (Heroin)|-2|0|2|1|0|2|1|Morphinan|Opioid|5
 Fentanyl|-2|0|2|1|0|2|1|Phenylpiperidine|Opioid|1
 Hydrocodone|-2|0|2|1|0|2|1|Morphinan|Opioid|3
-Kratom|0|0|2|1|0|1|1|Indole alkaloid|Opioid|4
+Kratom (mytraginine)|0|0|2|1|0|1|1|Indole alkaloid|Opioid|4
 Methadone|-2|0|1|1|0|2|2|Diphenylpropylamine|Opioid|1
 Morphine|-2|0|2|1|0|2|1|Morphinan|Opioid|3
 Tramadol|-1|0|1|1|0|1|1|Aminocyclohexanol|Opioid|2
@@ -186,7 +186,7 @@ Caffeine|1|0|0|0|0|1|1|Xanthine|Adenosine antagonist|2
 Nicotine|1|0|0|1|0|2|0|Pyridine alkaloid|Nicotinic agonist|0
 Propylhexedrine|1|0|0|1|1|1|1|Cycloalkylamine|Monoamine releaser|0
 JWH-018|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid|1
-JWH-073|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid|1
+JWH-073|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid|2
 Alkyl nitrates|-1|0|0|1|0|0|0|Nitrite ester|Vasodilator|2
 MDMA|2|1|0|1|0|1|1|Substituted amphetamine|Monoamine releaser|2`;
 const D=RAW.split("\n").map(l=>{const p=l.split("|");return{name:p[0],ef:+p[1],hl:+p[2],sz:+p[3],n:p[4]=="1",ana:p[5]=="1",ad:+p[6],dur:+p[7],cls:p[8],mech:p[9],ox:+p[10]}});
