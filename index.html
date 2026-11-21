@@ -92,6 +92,7 @@ details{background:var(--card);border:1px solid var(--bd);border-radius:12px;pad
 summary{cursor:pointer;color:var(--fg)}
 .cf{position:fixed;top:-14px;width:8px;height:14px;border-radius:2px;z-index:50;pointer-events:none;animation:fall linear forwards}
 @media(min-width:721px){.row>div.n{background:var(--card);backdrop-filter:blur(6px)}}
+#oxmsg{display:none;margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--card);border:1px solid var(--bd);backdrop-filter:blur(8px);animation:rise .4s both}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <meta name="theme-color" content="#0a0a1f">
@@ -99,113 +100,101 @@ summary{cursor:pointer;color:var(--fg)}
 <header class="top"><h1>💊 Drug Guesser</h1><a class="priv" href="privacy.html" aria-label="Privacy policy" title="Privacy policy"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8.4-8 9-4.8-.6-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></a></header>
 <div class="sub">Guess the mystery drug. For educational purposes only.</div>
 <div class="bar"><input id="in" placeholder="Type a substance name…" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Guess</button><button class="alt" id="new">Play again</button></div>
-<div id="sug"></div>
+<div id="oxmsg"></div><div id="sug"></div>
 <div class="meta"><span id="left"></span><span id="flags"></span><span class="key"><span style="background:var(--ok)"></span>match<span style="background:var(--no)"></span>no match</span></div>
 <div id="msg"></div>
 <div class="wrap"><div class="row h"><div>Substance</div><div>Effect</div><div>Hallucinogenic</div><div>Molecule size</div><div>Addiction</div><div>Duration</div><div>Chemical class</div><div>Mechanism</div></div><div id="board"></div></div>
 <details><summary>How the categories are defined</summary>
-<p><b>Effect:</b> sedating or stimulating effect on a five-step scale: very sedating, mildly sedating, neutral, mildly stimulating, very stimulating. It applies to every drug, so psychedelics and dissociatives are placed too (e.g. ketamine sedating, LSD mildly stimulating). <b>Hallucinogenic:</b> not, mildly (e.g. MDMA, cannabis, DXM) or very (classic psychedelics, dissociatives, deliriants). <b>Molecule size:</b> small (below ~250 g/mol), medium (~250–340) or large (above ~340). <b>Basic nitrogen:</b> contains an amine-type nitrogen that can be protonated. <b>Analogue:</b> a modified or designer derivative of an established parent compound, such as substituted tryptamines and phenethylamines (4-HO-MET, 2C-I), cathinones, novel dissociatives (3-MeO-PCP) and GABA analogues. The parent drugs themselves (amphetamine, methamphetamine, PCP, DMT, LSD and so on) are not analogues. The two yes/no traits, basic nitrogen and analogue, appear as small squares after your first guess: green means the mystery substance has the trait, gray means it doesn’t. <b>Addiction:</b> low, medium or high potential. <b>Duration:</b> total effect length (&lt;1h, 1–6h, 6–12h+). <b>Chemical class</b> is the structural family (e.g. morphinan, benzodiazepine, barbiturate, tryptamine). <b>Mechanism</b> is the main pharmacological action, shown as an extra clue.</p>
+<p><b>Effect:</b> sedating or stimulating effect on a five-step scale: very sedating, mildly sedating, neutral, mildly stimulating, very stimulating. It applies to every drug, so psychedelics and dissociatives are placed too (e.g. ketamine sedating, LSD mildly stimulating). <b>Hallucinogenic:</b> not, mildly (e.g. MDMA, cannabis, DXM) or very (classic psychedelics, dissociatives, deliriants). <b>Molecule size:</b> small (below ~250 g/mol), medium (~250–340) or large (above ~340). <b>Oxygen hint:</b> if a guess has exactly the same traits as the mystery drug but isn’t it, the game tells you how many oxygen atoms one molecule of the mystery drug contains (for plants and mixtures, the main active compound). <b>Basic nitrogen:</b> contains an amine-type nitrogen that can be protonated. <b>Analogue:</b> a modified or designer derivative of an established parent compound, such as substituted tryptamines and phenethylamines (4-HO-MET, 2C-I), cathinones, novel dissociatives (3-MeO-PCP) and GABA analogues. The parent drugs themselves (amphetamine, methamphetamine, PCP, DMT, LSD and so on) are not analogues. The two yes/no traits, basic nitrogen and analogue, appear as small squares after your first guess: green means the mystery substance has the trait, gray means it doesn’t. <b>Addiction:</b> low, medium or high potential. <b>Duration:</b> total effect length (&lt;1h, 1–6h, 6–12h+). <b>Chemical class</b> is the structural family (e.g. morphinan, benzodiazepine, barbiturate, tryptamine). <b>Mechanism</b> is the main pharmacological action, shown as an extra clue.</p>
 <p>Values were compiled from general knowledge of PsychonautWiki-style profiles and are simplified for gameplay. Check psychonautwiki.org for full details. For education only, not drug-use advice.</p></details>
 <script>
-// name|effect(-2..2)|halluc(0-2)|size(0-2)|basicN|analogue|addiction(0-2)|duration(0-2)|class|mechanism
-const RAW=`Psilocybin|-1|2|1|1|0|0|1|Tryptamine|Serotonergic
-LSD|1|2|2|1|0|0|2|Ergoline|Serotonergic
-Mescaline|1|2|0|1|0|0|2|Phenethylamine|Serotonergic
-DMT|-1|2|1|1|0|0|0|Tryptamine|Serotonergic
-1P-LSD|1|2|2|1|1|0|2|Ergoline|Serotonergic
-LSA|-1|2|2|1|0|0|2|Ergoline|Serotonergic
-AL-LAD|1|2|2|1|1|0|2|Ergoline|Serotonergic
-aMT|2|2|1|1|1|0|2|Tryptamine|Serotonergic
-DET|0|2|1|1|1|0|1|Tryptamine|Serotonergic
-DiPT|0|1|1|1|1|0|1|Tryptamine|Serotonergic
-4-AcO-DMT|0|2|1|1|1|0|1|Tryptamine|Serotonergic
-4-HO-MET|-1|2|1|1|1|0|1|Tryptamine|Serotonergic
-Bufotenin|0|1|1|1|0|0|1|Tryptamine|Serotonergic
-Ibogaine|1|2|2|1|0|0|2|Indole alkaloid|Serotonergic
-2C-B|1|2|1|1|1|0|1|Phenethylamine|Serotonergic
-2C-D|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
-2C-I|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
-2C-T-7|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
-2C-B-FLY|1|2|1|1|1|0|2|Benzodifuran|Serotonergic
-DOM|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic
-DOI|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic
-DOC|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic
-Bromo-DragonFLY|1|2|1|1|1|0|2|Benzodifuran|Serotonergic
-25C-NBOH|1|2|1|1|1|0|1|Phenethylamine|Serotonergic
-25B-NBOH|1|2|1|1|1|0|1|Phenethylamine|Serotonergic
-25C-NBOMe|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
-25I-NBOMe|1|2|1|1|1|0|2|Phenethylamine|Serotonergic
-Alprazolam|-2|0|2|0|0|2|1|Benzodiazepine|GABAergic
-Clonazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic
-Diazepam|-2|0|2|0|0|1|2|Benzodiazepine|GABAergic
-Flunitrazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic
-Lorazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic
-Midazolam|-2|0|2|0|0|1|1|Benzodiazepine|GABAergic
-Etizolam|-2|0|2|0|1|2|1|Benzodiazepine|GABAergic
-Phenobarbital|-2|0|1|0|0|2|2|Barbiturate|GABAergic
-Gaboxadol|-2|1|0|1|1|0|1|Isoxazole|GABAergic
-Muscimol|-1|2|0|1|0|0|1|Isoxazole|GABAergic
-Zolpidem|-2|0|2|0|0|1|1|Z-drug|GABAergic
-Zopiclone|-2|0|2|1|0|1|1|Z-drug|GABAergic
-Baclofen|-2|0|1|1|1|0|1|GABA analogue|GABAergic
-Phenibut|-2|0|1|1|1|2|2|GABA analogue|GABAergic
-GHB|-1|0|0|0|0|2|1|Hydroxy acid|GABAergic
-GBL|-1|0|0|0|1|2|1|Lactone|GABAergic
-Kava|-1|0|1|0|0|0|1|Kavalactone|GABAergic
-Methaqualone|-2|0|1|0|0|2|1|Quinazolinone|GABAergic
-Gabapentin|-1|0|0|1|1|0|2|GABA analogue|Ca-channel
-Pregabalin|-1|0|0|1|1|0|2|GABA analogue|Ca-channel
-Codeine|-1|0|2|1|0|2|1|Morphinan|Opioid
-Diacetylmorphine (Heroin)|-2|0|2|1|0|2|1|Morphinan|Opioid
-Fentanyl|-2|0|2|1|0|2|1|Phenylpiperidine|Opioid
-Hydrocodone|-2|0|2|1|0|2|1|Morphinan|Opioid
-Hydromorphone|-2|0|2|1|0|2|1|Morphinan|Opioid
-Kratom|0|0|2|1|0|1|1|Indole alkaloid|Opioid
-Methadone|-2|0|1|1|0|2|2|Diphenylpropylamine|Opioid
-Morphine|-2|0|2|1|0|2|1|Morphinan|Opioid
-Tramadol|-1|0|1|1|0|1|1|Aminocyclohexanol|Opioid
-U-47700|-2|0|1|1|1|2|1|Benzamide|Opioid
-Tianeptine|1|0|2|1|0|2|1|Tricyclic|Opioid
-Mirtazapine|-2|0|1|1|0|0|2|Tetracyclic|5-HT/alpha-2 antagonist
-Diphenhydramine|-2|2|1|1|0|0|1|Ethanolamine|Anticholinergic
-Cannabis|-1|1|1|0|0|1|1|Cannabinoid|Cannabinoid
-Datura|-1|2|2|1|0|0|2|Tropane alkaloid|Anticholinergic
-Salvia (salvinorin A)|0|2|2|0|0|0|0|Diterpenoid|Kappa agonist
-Ketamine|-2|2|1|1|0|1|1|Arylcyclohexylamine|NMDA antagonist
-Methoxetamine (MXE)|-1|2|1|1|1|0|1|Arylcyclohexylamine|NMDA antagonist
-PCP|1|2|2|1|0|1|2|Arylcyclohexylamine|NMDA antagonist
-DCK|-1|2|1|1|1|1|1|Arylcyclohexylamine|NMDA antagonist
-2FDCK|-1|2|1|1|1|1|1|Arylcyclohexylamine|NMDA antagonist
-DXM|-1|1|1|1|0|0|2|Morphinan|NMDA antagonist
-Memantine|0|1|0|1|0|0|2|Adamantane|NMDA antagonist
-Nitrous oxide|-2|1|0|0|0|0|0|Inorganic gas|NMDA antagonist
-Xenon|-2|1|0|0|0|0|0|Noble gas|NMDA antagonist
-Amphetamine|2|0|0|1|0|2|2|Substituted amphetamine|Monoamine releaser
-2-FMA|2|0|0|1|1|1|1|Substituted amphetamine|Monoamine releaser
-Methamphetamine|2|0|0|1|0|2|2|Substituted amphetamine|Monoamine releaser
-Lisdexamphetamine|2|0|1|1|1|1|2|Substituted amphetamine|Monoamine releaser
-3-FPM|2|0|0|1|1|1|1|Phenmetrazine|Monoamine releaser
-Methylphenidate|2|0|1|1|0|1|1|Phenidate|Reuptake inhibitor
-Ethylphenidate|2|0|1|1|1|1|1|Phenidate|Reuptake inhibitor
-3-MMC|2|0|0|1|1|2|1|Cathinone|Monoamine releaser
-Cathinone|2|0|0|1|0|1|1|Cathinone|Monoamine releaser
-Methcathinone|2|0|0|1|1|2|1|Cathinone|Monoamine releaser
-a-PVP|2|0|1|1|1|2|1|Cathinone|Reuptake inhibitor
-MDPV|2|0|1|1|1|2|1|Cathinone|Reuptake inhibitor
-Cocaine|2|0|1|1|0|2|1|Tropane alkaloid|Reuptake inhibitor
-Caffeine|1|0|0|0|0|1|1|Xanthine|Adenosine antagonist
-Nicotine|1|0|0|1|0|2|0|Pyridine alkaloid|Nicotinic agonist
-Propylhexedrine|1|0|0|1|1|1|1|Cycloalkylamine|Monoamine releaser
-JWH-018|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid
-JWH-073|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid
-Alkyl nitrates|-1|0|0|1|0|0|0|Nitrite ester|Vasodilator
-MDMA|2|1|0|1|0|1|1|Substituted amphetamine|Monoamine releaser`;
-const D=RAW.split("\n").map(l=>{const p=l.split("|");return{name:p[0],ef:+p[1],hl:+p[2],sz:+p[3],n:p[4]=="1",ana:p[5]=="1",ad:+p[6],dur:+p[7],cls:p[8],mech:p[9]}});
+// name|effect(-2..2)|halluc(0-2)|size(0-2)|basicN|analogue|addiction(0-2)|duration(0-2)|class|mechanism|oxygen
+const RAW=`Psilocybin|-1|2|1|1|0|0|1|Tryptamine|Serotonergic|4
+LSD|1|2|2|1|0|0|2|Ergoline|Serotonergic|1
+Mescaline|1|2|0|1|0|0|2|Phenethylamine|Serotonergic|3
+DMT|-1|2|1|1|0|0|0|Tryptamine|Serotonergic|0
+1P-LSD|1|2|2|1|1|0|2|Ergoline|Serotonergic|2
+LSA|-1|2|2|1|0|0|2|Ergoline|Serotonergic|1
+AL-LAD|1|2|2|1|1|0|2|Ergoline|Serotonergic|1
+aMT|2|2|1|1|1|0|2|Tryptamine|Serotonergic|0
+DET|0|2|1|1|1|0|1|Tryptamine|Serotonergic|0
+DiPT|0|1|1|1|1|0|1|Tryptamine|Serotonergic|0
+4-AcO-DMT|0|2|1|1|1|0|1|Tryptamine|Serotonergic|2
+4-HO-MET|-1|2|1|1|1|0|1|Tryptamine|Serotonergic|1
+Bufotenin|0|1|1|1|0|0|1|Tryptamine|Serotonergic|1
+Ibogaine|1|2|2|1|0|0|2|Indole alkaloid|Serotonergic|1
+2C-B|1|2|1|1|1|0|1|Phenethylamine|Serotonergic|2
+2C-D|1|2|1|1|1|0|2|Phenethylamine|Serotonergic|2
+DOM|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic|2
+Bromo-DragonFLY|1|2|1|1|1|0|2|Benzodifuran|Serotonergic|2
+25C-NBOH|1|2|1|1|1|0|1|Phenethylamine|Serotonergic|3
+25C-NBOMe|1|2|1|1|1|0|2|Phenethylamine|Serotonergic|3
+Alprazolam|-2|0|2|0|0|2|1|Benzodiazepine|GABAergic|0
+Clonazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|3
+Diazepam|-2|0|2|0|0|1|2|Benzodiazepine|GABAergic|1
+Lorazepam|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|2
+Midazolam|-2|0|2|0|0|1|1|Benzodiazepine|GABAergic|0
+Etizolam|-2|0|2|0|1|2|1|Benzodiazepine|GABAergic|0
+Phenobarbital|-2|0|1|0|0|2|2|Barbiturate|GABAergic|3
+Gaboxadol|-2|1|0|1|1|0|1|Isoxazole|GABAergic|2
+Muscimol|-1|2|0|1|0|0|1|Isoxazole|GABAergic|2
+Zolpidem|-2|0|2|0|0|1|1|Z-drug|GABAergic|1
+Zopiclone|-2|0|2|1|0|1|1|Z-drug|GABAergic|3
+Baclofen|-2|0|1|1|1|0|1|GABA analogue|GABAergic|2
+Phenibut|-2|0|1|1|1|2|2|GABA analogue|GABAergic|2
+GHB|-1|0|0|0|0|2|1|Hydroxy acid|GABAergic|3
+GBL|-1|0|0|0|1|2|1|Lactone|GABAergic|2
+Kava|-1|0|1|0|0|0|1|Kavalactone|GABAergic|3
+Methaqualone|-2|0|1|0|0|2|1|Quinazolinone|GABAergic|1
+Gabapentin|-1|0|0|1|1|0|2|GABA analogue|Ca-channel|2
+Codeine|-1|0|2|1|0|2|1|Morphinan|Opioid|3
+Diacetylmorphine (Heroin)|-2|0|2|1|0|2|1|Morphinan|Opioid|5
+Fentanyl|-2|0|2|1|0|2|1|Phenylpiperidine|Opioid|1
+Hydrocodone|-2|0|2|1|0|2|1|Morphinan|Opioid|3
+Kratom|0|0|2|1|0|1|1|Indole alkaloid|Opioid|4
+Methadone|-2|0|1|1|0|2|2|Diphenylpropylamine|Opioid|1
+Morphine|-2|0|2|1|0|2|1|Morphinan|Opioid|3
+Tramadol|-1|0|1|1|0|1|1|Aminocyclohexanol|Opioid|2
+U-47700|-2|0|1|1|1|2|1|Benzamide|Opioid|1
+Tianeptine|1|0|2|1|0|2|1|Tricyclic|Opioid|4
+Mirtazapine|-2|0|1|1|0|0|2|Tetracyclic|5-HT/alpha-2 antagonist|0
+Diphenhydramine|-2|2|1|1|0|0|1|Ethanolamine|Anticholinergic|1
+Cannabis|-1|1|1|0|0|1|1|Cannabinoid|Cannabinoid|2
+Datura|-1|2|2|1|0|0|2|Tropane alkaloid|Anticholinergic|4
+Salvia (salvinorin A)|0|2|2|0|0|0|0|Diterpenoid|Kappa agonist|8
+Ketamine|-2|2|1|1|0|1|1|Arylcyclohexylamine|NMDA antagonist|1
+Methoxetamine (MXE)|-1|2|1|1|1|0|1|Arylcyclohexylamine|NMDA antagonist|2
+PCP|1|2|2|1|0|1|2|Arylcyclohexylamine|NMDA antagonist|0
+DCK|-1|2|1|1|1|1|1|Arylcyclohexylamine|NMDA antagonist|1
+DXM|-1|1|1|1|0|0|2|Morphinan|NMDA antagonist|1
+Memantine|0|1|0|1|0|0|2|Adamantane|NMDA antagonist|0
+Nitrous oxide|-2|1|0|0|0|0|0|Inorganic gas|NMDA antagonist|1
+Xenon|-2|1|0|0|0|0|0|Noble gas|NMDA antagonist|0
+Amphetamine|2|0|0|1|0|2|2|Substituted amphetamine|Monoamine releaser|0
+2-FMA|2|0|0|1|1|1|1|Substituted amphetamine|Monoamine releaser|0
+Methamphetamine|2|0|0|1|0|2|2|Substituted amphetamine|Monoamine releaser|0
+Lisdexamphetamine|2|0|1|1|1|1|2|Substituted amphetamine|Monoamine releaser|1
+3-FPM|2|0|0|1|1|1|1|Phenmetrazine|Monoamine releaser|1
+Methylphenidate|2|0|1|1|0|1|1|Phenidate|Reuptake inhibitor|2
+Ethylphenidate|2|0|1|1|1|1|1|Phenidate|Reuptake inhibitor|2
+3-MMC|2|0|0|1|1|2|1|Cathinone|Monoamine releaser|1
+Cathinone|2|0|0|1|0|1|1|Cathinone|Monoamine releaser|1
+a-PVP|2|0|1|1|1|2|1|Cathinone|Reuptake inhibitor|1
+MDPV|2|0|1|1|1|2|1|Cathinone|Reuptake inhibitor|3
+Cocaine|2|0|1|1|0|2|1|Tropane alkaloid|Reuptake inhibitor|4
+Caffeine|1|0|0|0|0|1|1|Xanthine|Adenosine antagonist|2
+Nicotine|1|0|0|1|0|2|0|Pyridine alkaloid|Nicotinic agonist|0
+Propylhexedrine|1|0|0|1|1|1|1|Cycloalkylamine|Monoamine releaser|0
+JWH-018|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid|1
+JWH-073|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid|1
+Alkyl nitrates|-1|0|0|1|0|0|0|Nitrite ester|Vasodilator|2
+MDMA|2|1|0|1|0|1|1|Substituted amphetamine|Monoamine releaser|2`;
+const D=RAW.split("\n").map(l=>{const p=l.split("|");return{name:p[0],ef:+p[1],hl:+p[2],sz:+p[3],n:p[4]=="1",ana:p[5]=="1",ad:+p[6],dur:+p[7],cls:p[8],mech:p[9],ox:+p[10]}});
 const DUR=["<1h","1–6h","6–12h+"],MAX=7;
 let target,guesses,over,isDaily=true;
 const $=id=>document.getElementById(id);
 function dailyIndex(){const n=new Date(),s=n.getFullYear()+"-"+(n.getMonth()+1)+"-"+n.getDate();let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}let t=(h>>>0)+0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)%D.length}
-function start(daily){isDaily=!!daily;target=isDaily?D[dailyIndex()]:D[Math.floor(Math.random()*D.length)];$("new").style.display="none";guesses=[];over=false;$("board").innerHTML="";$("msg").style.display="none";$("in").value="";$("in").disabled=false;upd();sugg()}
+function start(daily){isDaily=!!daily;target=isDaily?D[dailyIndex()]:D[Math.floor(Math.random()*D.length)];$("new").style.display="none";guesses=[];over=false;$("board").innerHTML="";$("oxmsg").style.display="none";$("msg").style.display="none";$("in").value="";$("in").disabled=false;upd();sugg()}
 function upd(){$("left").textContent=(isDaily?"Daily puzzle · ":"Practice game · ")+`Guesses left: ${MAX-guesses.length}`;
 const f=$("flags");f.innerHTML="";if(guesses.length)[["Basic nitrogen",target.n],["Analogue",target.ana]].forEach(([l,v])=>{const s=document.createElement("span");s.className="fl";s.title=l+": "+(v?"yes":"no");const i=document.createElement("i");if(v)i.className="y";s.append(i,l);f.appendChild(s)})}
 function cell(lab,t,ok){const e=document.createElement("div");if(ok)e.className="ok";const s=document.createElement("small");s.textContent=lab;e.append(s,t);return e}
@@ -230,6 +219,7 @@ function guess(){
     cell("Chemical class",g.cls,g.cls==target.cls),
     cell("Mechanism",g.mech,g.mech==target.mech));
   [...r.children].forEach((c,i)=>c.style.animationDelay=i*80+"ms");$("board").prepend(r);$("in").value="";upd();sugg();
+  if(g!=target&&["ef","hl","sz","n","ana","ad","dur","cls","mech"].every(k=>g[k]==target[k])){const o=$("oxmsg"),k=target.ox;o.textContent=`Every trait matches, but the mystery drug isn’t ${g.name}. It contains ${k==0?"no oxygen atoms":k+" oxygen atom"+(k==1?"":"s")}.`;o.style.display="block"}
   if(g==target){r.classList.add("win");confetti();over=true;say(`🎉 Correct! It was <b>${target.name}</b>, found in ${guesses.length} guess${guesses.length>1?"es":""}.`)}
   else if(guesses.length>=MAX){over=true;say(`Out of guesses. The answer was <b>${target.name}</b> (${target.mech}).`)}
   if(over){$("in").disabled=true;$("new").style.display="";if(isDaily)$("msg").innerHTML+="<br>That was today’s puzzle. A new one arrives tomorrow, or press Play again for a random one."}
