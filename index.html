@@ -109,6 +109,8 @@ details ul{margin:10px 0 0;padding-left:20px}
 details li{margin:7px 0;line-height:1.45}
 @media(max-width:720px){.row:not(.h)>div.n{border:0;background:none;box-shadow:none;backdrop-filter:none}}
 @media(max-width:720px){body{background:linear-gradient(to bottom,#371b7c 0,rgba(55,27,124,0) calc(env(safe-area-inset-top,0px) + 220px)),radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),#0a0a1f;background-attachment:fixed}}
+#topcap{display:none}
+@media(max-width:720px){#topcap{display:block;position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 8px);background:#371b7c;z-index:60;pointer-events:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <meta name="theme-color" content="#0a0a1f">
@@ -131,7 +133,7 @@ details li{margin:7px 0;line-height:1.45}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"Drug Guesser","applicationCategory":"GameApplication","operatingSystem":"Any","url":"https://drugguesser.lol/","description":"A free daily guessing game about psychoactive substances.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 </script>
-</head><body><main>
+</head><body><div id="topcap" aria-hidden="true"></div><main>
 <header class="top"><h1>💊 Drug Guesser</h1><div class="tools"><button class="priv" id="help" aria-label="How to play" title="How to play">?</button><a class="priv" href="privacy.html" aria-label="Privacy policy" title="Privacy policy"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8.4-8 9-4.8-.6-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></a></div></header>
 <div class="sub">Guess the mystery drug. Educational purposes only.</div>
 <div class="bar"><input id="in" placeholder="Type a substance name…" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Guess</button><button class="alt" id="new">Play again</button></div>
