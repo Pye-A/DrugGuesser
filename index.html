@@ -125,14 +125,23 @@ button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shado
 </script>
 </head><body><main>
 <header class="top"><h1>💊 Drug Guesser</h1><div class="tools"><button class="priv" id="help" aria-label="How to play" title="How to play">?</button><a class="priv" href="privacy.html" aria-label="Privacy policy" title="Privacy policy"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8.4-8 9-4.8-.6-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></a></div></header>
-<div class="sub">Guess the mystery drug. For educational purposes only.</div>
+<div class="sub">Guess the mystery drug. Educational purposes only.</div>
 <div class="bar"><input id="in" placeholder="Type a substance name…" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Guess</button><button class="alt" id="new">Play again</button></div>
 <div id="oxmsg"></div><div id="sug"></div>
 <div class="meta"><span id="left"></span><span id="flags"></span><span class="key"><span style="background:var(--ok)"></span>match<span style="background:var(--no)"></span>no match</span></div>
 <div id="msg"></div>
 <div class="wrap"><div class="row h"><div>Substance</div><div>Effect</div><div>Hallucinogenic</div><div>Molecule size</div><div>Addiction</div><div>Duration</div><div>Chemical class</div><div>Mechanism</div></div><div id="board"></div></div>
 <details><summary>How the categories are defined</summary>
-<p><b>Effect:</b> sedating or stimulating effect on a five-step scale: very sedating, mildly sedating, neutral, mildly stimulating, very stimulating. It applies to every drug, so psychedelics and dissociatives are placed too (e.g. ketamine sedating, LSD mildly stimulating). <b>Hallucinogenic:</b> not, mildly (e.g. MDMA, cannabis, DXM) or very (classic psychedelics, dissociatives, deliriants). <b>Molecule size:</b> small (below ~250 g/mol), medium (~250–340) or large (above ~340). <b>Oxygen hint:</b> if a guess has exactly the same traits as the mystery drug but isn’t it, the game tells you how many oxygen atoms one molecule of the mystery drug contains (for plants and mixtures, the main active compound). <b>Basic nitrogen:</b> contains an amine-type nitrogen that can be protonated. <b>Analogue:</b> a modified or designer derivative of an established parent compound, such as substituted tryptamines and phenethylamines (4-HO-MET, 2C-I), cathinones, novel dissociatives (3-MeO-PCP) and GABA analogues. The parent drugs themselves (amphetamine, methamphetamine, PCP, DMT, LSD and so on) are not analogues. The two yes/no traits, basic nitrogen and analogue, appear as small squares after your first guess: green means the mystery substance has the trait, gray means it doesn’t. <b>Addiction:</b> low, medium or high potential. <b>Duration:</b> total effect length (&lt;1h, 1–6h, 6–12h+). <b>Chemical class</b> is the structural family (e.g. morphinan, benzodiazepine, barbiturate, tryptamine). <b>Mechanism</b> is the main pharmacological action, shown as an extra clue.</p>
+<p><b>Effect:</b> sedating or stimulating effect on a five-step scale: very sedating, mildly sedating, neutral, mildly stimulating, very stimulating. It applies to every drug, so psychedelics and dissociatives are placed too (e.g. ketamine sedating, LSD mildly stimulating). 
+<b>Hallucinogenic:</b> not, mildly (e.g. MDMA, cannabis, DXM) or very (classic psychedelics, dissociatives, deliriants). 
+<b>Molecule size:</b> small (below ~250 g/mol), medium (~250–340) or large (above ~340). 
+<b>Basic nitrogen:</b> contains an amine-type nitrogen that can be protonated. 
+<b>Analogue:</b> a modified or designer derivative of an established parent compound, such as substituted tryptamines and phenethylamines (4-HO-MET, 2C-I), cathinones, novel dissociatives (3-MeO-PCP) and GABA analogues. 
+<b>Addiction:</b> low, medium or high potential. 
+<b>Duration:</b> total effect length (&lt;1h, 1–6h, 6–12h+). 
+<b>Chemical class</b> is the structural family (e.g. morphinan, benzodiazepine, barbiturate, tryptamine).
+<b>Mechanism</b> is the main pharmacological action, shown as an extra clue.</p>
+<b>Oxygen hint:</b> if a guess has exactly the same traits as the mystery drug but isn’t it, the game tells you how many oxygen atoms one molecule of the mystery drug contains (for plants and mixtures, the main active compound). 
 <p>Values were compiled from general knowledge from PsychonautWiki and are simplified for gameplay. Check psychonautwiki.org for full details. For education only, not drug-use advice.</p></details>
 <div id="how" class="modal" role="dialog" aria-modal="true" aria-labelledby="howt" hidden>
 <div class="mbox">
