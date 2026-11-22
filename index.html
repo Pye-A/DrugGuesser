@@ -20,7 +20,8 @@ button.alt{background:var(--no)}
 .fl{display:inline-flex;align-items:center;gap:6px}
 .fl i{width:16px;height:16px;border-radius:4px;background:var(--no);display:inline-block}
 .fl i.y{background:var(--ok)}
-.wrap{overflow-x:auto}
+.wrap{overflow-x:auto;overflow-x:clip;scrollbar-width:none}
+.wrap::-webkit-scrollbar{display:none}
 .row{display:grid;grid-template-columns:140px repeat(7,minmax(86px,1fr));gap:4px;margin-bottom:4px}
 .row>div{padding:8px 4px;border-radius:6px;text-align:center;font-size:.8rem;display:flex;align-items:center;justify-content:center;min-height:44px;color:#fff;background:var(--no)}
 .row>div small{display:none}
@@ -55,9 +56,9 @@ h1{font-size:1.4rem}
 
 /* ---- Deep theme + animations ---- */
 :root:root:root{--bg:#0a0a1f;--fg:#ecebff;--card:rgba(255,255,255,.06);--mut:#a3a3c8;--ok:#10b981;--no:#2b2d55;--bd:rgba(167,139,250,.22);--acc:#a78bfa;--acc2:#22d3ee}
-body{background:linear-gradient(to bottom,#0a0a1f 0,#0a0a1f env(safe-area-inset-top,0px),rgba(10,10,31,0) calc(env(safe-area-inset-top,0px) + 110px)),radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),#0a0a1f;background-attachment:fixed;min-height:100vh;min-height:100dvh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),#0a0a1f;background-attachment:fixed;min-height:100vh;min-height:100dvh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body::before,body::after{content:"";position:fixed;z-index:-1;width:46vmax;height:46vmax;border-radius:50%;filter:blur(90px);opacity:.28;pointer-events:none;animation:drift 22s ease-in-out infinite alternate}
-body::before{background:#7c3aed;top:4vmax;left:-14vmax}
+body::before{background:#7c3aed;top:-18vmax;left:-12vmax}
 body::after{background:#06b6d4;bottom:-20vmax;right:-14vmax;animation-delay:-9s}
 @keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}}
@@ -104,9 +105,13 @@ button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shado
 .mbox li{margin:8px 0;line-height:1.45}
 .x{position:absolute;top:10px;right:10px;width:34px;height:34px;padding:0;border-radius:10px;font-size:1.4rem;line-height:1;background:var(--card);border:1px solid var(--bd);box-shadow:none;color:var(--fg)}
 #howok{width:100%}
+details ul{margin:10px 0 0;padding-left:20px}
+details li{margin:7px 0;line-height:1.45}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
-<meta name="theme-color" content="#0a0a1f">
+<meta name="theme-color" content="#231250">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" type="image/png" href="favicon2.png">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1088194409929523"
      crossorigin="anonymous"></script>
@@ -132,16 +137,18 @@ button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shado
 <div id="msg"></div>
 <div class="wrap"><div class="row h"><div>Substance</div><div>Effect</div><div>Hallucinogenic</div><div>Molecule size</div><div>Addiction</div><div>Duration</div><div>Chemical class</div><div>Mechanism</div></div><div id="board"></div></div>
 <details><summary>How the categories are defined</summary>
-<p><b>Effect:</b> sedating or stimulating effect on a five-step scale: very sedating, mildly sedating, neutral, mildly stimulating, very stimulating. It applies to every drug, so psychedelics and dissociatives are placed too (e.g. ketamine sedating, LSD mildly stimulating). 
-<b>Hallucinogenic:</b> not, mildly (e.g. MDMA, cannabis, DXM) or very (classic psychedelics, dissociatives, deliriants). 
-<b>Molecule size:</b> small (below ~250 g/mol), medium (~250–340) or large (above ~340). 
-<b>Basic nitrogen:</b> contains an amine-type nitrogen that can be protonated. 
-<b>Analogue:</b> a modified or designer derivative of an established parent compound, such as substituted tryptamines and phenethylamines (4-HO-MET, 2C-I), cathinones, novel dissociatives (3-MeO-PCP) and GABA analogues. 
-<b>Addiction:</b> low, medium or high potential. 
-<b>Duration:</b> total effect length (&lt;1h, 1–6h, 6–12h+). 
-<b>Chemical class</b> is the structural family (e.g. morphinan, benzodiazepine, barbiturate, tryptamine).
-<b>Mechanism</b> is the main pharmacological action, shown as an extra clue.
-<b>Oxygen hint:</b> if a guess has exactly the same traits as the mystery drug but isn’t it, the game tells you how many oxygen atoms one molecule of the mystery drug contains (for plants and mixtures, the main active compound).</p>
+<ul>
+<li><b>Effect:</b> sedating or stimulating effect on a five-step scale: very sedating, mildly sedating, neutral, mildly stimulating, very stimulating. It applies to every drug, so psychedelics and dissociatives are placed too (e.g. ketamine sedating, LSD mildly stimulating).</li>
+<li><b>Hallucinogenic:</b> not, mildly (e.g. MDMA, cannabis, DXM) or very (classic psychedelics, dissociatives, deliriants).</li>
+<li><b>Molecule size:</b> small (below ~250 g/mol), medium (~250–340) or large (above ~340).</li>
+<li><b>Basic nitrogen:</b> contains an amine-type nitrogen that can be protonated.</li>
+<li><b>Analogue:</b> a modified or designer derivative of an established parent compound, such as substituted tryptamines and phenethylamines (4-HO-MET, 2C-I), cathinones, novel dissociatives (3-MeO-PCP) and GABA analogues.</li>
+<li><b>Addiction:</b> low, medium or high potential.</li>
+<li><b>Duration:</b> total effect length (&lt;1h, 1–6h, 6–12h+).</li>
+<li><b>Chemical class:</b> the structural family (e.g. morphinan, benzodiazepine, barbiturate, tryptamine).</li>
+<li><b>Mechanism:</b> the main pharmacological action, shown as an extra clue.</li>
+<li><b>Oxygen hint:</b> if a guess has exactly the same traits as the mystery drug but isn’t it, the game tells you how many oxygen atoms one molecule of the mystery drug contains (for plants and mixtures, the main active compound).</li>
+</ul>
 <p>Values were compiled from general knowledge from PsychonautWiki and are simplified for gameplay. Check psychonautwiki.org for full details. For education only, not drug-use advice.</p></details>
 <div id="how" class="modal" role="dialog" aria-modal="true" aria-labelledby="howt" hidden>
 <div class="mbox">
@@ -177,7 +184,8 @@ Ibogaine (Iboga)|1|2|2|1|0|0|2|Indole alkaloid|Serotonergic|1
 2C-D|1|2|1|1|1|0|2|Phenethylamine|Serotonergic|2
 DOM|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic|2
 Bromo-DragonFLY|1|2|1|1|1|0|2|Benzodifuran|Serotonergic|2
-25C-NBOMe|1|2|1|1|1|0|2|N-benzyl phenethylamine|Serotonergic|3
+25C-NBOH|1|2|1|1|1|0|1|Phenethylamine|Serotonergic|3
+25C-NBOMe|1|2|1|1|1|0|2|Phenethylamine|Serotonergic|3
 Alprazolam (Xanax)|-2|0|2|0|0|2|1|Benzodiazepine|GABAergic|0
 Clonazepam (Klonopin)|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|3
 Diazepam (Valium)|-2|0|2|0|0|1|2|Benzodiazepine|GABAergic|1
