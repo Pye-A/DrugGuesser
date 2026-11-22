@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Drug Guesser</title>
 <style>
-:root{--bg:#f6f7f9;--fg:#1c2028;--card:#fff;--mut:#6b7280;--ok:#2e9e5b;--no:#8a909c;--bd:#d9dde3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg:#f6f7f9;--fg:#1c2028;--card:#fff;--mut:#6b7280;--ok:#2e9e5b;--no:#8a909c;--bd:#d9dde3;box-sizing:border-box}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171d;--fg:#e8eaee;--card:#1d222b;--mut:#9aa1ad;--ok:#2f8f58;--no:#444b57;--bd:#2c323d}}
 :root[data-theme="dark"]{--bg:#14171d;--fg:#e8eaee;--card:#1d222b;--mut:#9aa1ad;--ok:#2f8f58;--no:#444b57;--bd:#2c323d}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -56,9 +55,9 @@ h1{font-size:1.4rem}
 
 /* ---- Deep theme + animations ---- */
 :root:root:root{--bg:#0a0a1f;--fg:#ecebff;--card:rgba(255,255,255,.06);--mut:#a3a3c8;--ok:#10b981;--no:#2b2d55;--bd:rgba(167,139,250,.22);--acc:#a78bfa;--acc2:#22d3ee}
-body{background:radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),#0a0a1f;background-attachment:fixed;min-height:100vh}
+body{background:linear-gradient(to bottom,#0a0a1f 0,#0a0a1f env(safe-area-inset-top,0px),rgba(10,10,31,0) calc(env(safe-area-inset-top,0px) + 110px)),radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),#0a0a1f;background-attachment:fixed;min-height:100vh;min-height:100dvh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body::before,body::after{content:"";position:fixed;z-index:-1;width:46vmax;height:46vmax;border-radius:50%;filter:blur(90px);opacity:.28;pointer-events:none;animation:drift 22s ease-in-out infinite alternate}
-body::before{background:#7c3aed;top:-18vmax;left:-12vmax}
+body::before{background:#7c3aed;top:4vmax;left:-14vmax}
 body::after{background:#06b6d4;bottom:-20vmax;right:-14vmax;animation-delay:-9s}
 @keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}}
@@ -93,7 +92,7 @@ summary{cursor:pointer;color:var(--fg)}
 .cf{position:fixed;top:-14px;width:8px;height:14px;border-radius:2px;z-index:50;pointer-events:none;animation:fall linear forwards}
 @media(min-width:721px){.row>div.n{background:var(--card);backdrop-filter:blur(6px)}}
 #oxmsg{display:none;margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--card);border:1px solid var(--bd);backdrop-filter:blur(8px);animation:rise .4s both}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+html{overflow-x:clip;overscroll-behavior-y:none}
 .tools{display:flex;gap:8px}
 button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shadow:none}
 .modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));background:rgba(5,4,20,.72);backdrop-filter:blur(6px);animation:fade .25s both}
@@ -105,6 +104,7 @@ button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shado
 .mbox li{margin:8px 0;line-height:1.45}
 .x{position:absolute;top:10px;right:10px;width:34px;height:34px;padding:0;border-radius:10px;font-size:1.4rem;line-height:1;background:var(--card);border:1px solid var(--bd);box-shadow:none;color:var(--fg)}
 #howok{width:100%}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <meta name="theme-color" content="#0a0a1f">
 <link rel="icon" type="image/png" href="favicon2.png">
@@ -134,7 +134,6 @@ button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shado
 <details><summary>How the categories are defined</summary>
 <p><b>Effect:</b> sedating or stimulating effect on a five-step scale: very sedating, mildly sedating, neutral, mildly stimulating, very stimulating. It applies to every drug, so psychedelics and dissociatives are placed too (e.g. ketamine sedating, LSD mildly stimulating). <b>Hallucinogenic:</b> not, mildly (e.g. MDMA, cannabis, DXM) or very (classic psychedelics, dissociatives, deliriants). <b>Molecule size:</b> small (below ~250 g/mol), medium (~250–340) or large (above ~340). <b>Oxygen hint:</b> if a guess has exactly the same traits as the mystery drug but isn’t it, the game tells you how many oxygen atoms one molecule of the mystery drug contains (for plants and mixtures, the main active compound). <b>Basic nitrogen:</b> contains an amine-type nitrogen that can be protonated. <b>Analogue:</b> a modified or designer derivative of an established parent compound, such as substituted tryptamines and phenethylamines (4-HO-MET, 2C-I), cathinones, novel dissociatives (3-MeO-PCP) and GABA analogues. The parent drugs themselves (amphetamine, methamphetamine, PCP, DMT, LSD and so on) are not analogues. The two yes/no traits, basic nitrogen and analogue, appear as small squares after your first guess: green means the mystery substance has the trait, gray means it doesn’t. <b>Addiction:</b> low, medium or high potential. <b>Duration:</b> total effect length (&lt;1h, 1–6h, 6–12h+). <b>Chemical class</b> is the structural family (e.g. morphinan, benzodiazepine, barbiturate, tryptamine). <b>Mechanism</b> is the main pharmacological action, shown as an extra clue.</p>
 <p>Values were compiled from general knowledge from PsychonautWiki and are simplified for gameplay. Check psychonautwiki.org for full details. For education only, not drug-use advice.</p></details>
-<script>
 <div id="how" class="modal" role="dialog" aria-modal="true" aria-labelledby="howt" hidden>
 <div class="mbox">
 <button class="x" id="howx" aria-label="Close">×</button>
@@ -149,6 +148,7 @@ button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shado
 </ul>
 <button id="howok">Got it</button>
 </div></div>
+<script>
 // name|effect(-2..2)|halluc(0-2)|size(0-2)|basicN|analogue|addiction(0-2)|duration(0-2)|class|mechanism|oxygen
 const RAW=`Psilocybin (mushrooms)|-1|2|1|1|0|0|1|Tryptamine|Serotonergic|4
 LSD (acid)|1|2|2|1|0|0|2|Ergoline|Serotonergic|1
@@ -188,11 +188,11 @@ GBL|-1|0|0|0|1|2|1|Lactone|GABAergic|2
 Kava|-1|0|1|0|0|0|1|Kavalactone|GABAergic|3
 Methaqualone (Quaalude)|-2|0|1|0|0|2|1|Quinazolinone|GABAergic|1
 Gabapentin|-1|0|0|1|1|0|2|GABA analogue|Ca-channel|2
-Codeine |-1|0|2|1|0|2|1|Morphinan|Opioid|3
+Codeine|-1|0|2|1|0|2|1|Morphinan|Opioid|3
 Diacetylmorphine (Heroin)|-2|0|2|1|0|2|1|Morphinan|Opioid|5
 Fentanyl|-2|0|2|1|0|2|1|Phenylpiperidine|Opioid|1
 Hydrocodone|-2|0|2|1|0|2|1|Morphinan|Opioid|3
-Kratom (mytraginine)|0|0|2|1|0|1|1|Indole alkaloid|Opioid|4
+Kratom (mitragynine)|0|0|2|1|0|1|1|Indole alkaloid|Opioid|4
 Methadone|-2|0|1|1|0|2|2|Diphenylpropylamine|Opioid|1
 Morphine|-2|0|2|1|0|2|1|Morphinan|Opioid|3
 Tramadol|-1|0|1|1|0|1|1|Aminocyclohexanol|Opioid|2
