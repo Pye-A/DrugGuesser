@@ -93,7 +93,7 @@ summary{cursor:pointer;color:var(--fg)}
 .cf{position:fixed;top:-14px;width:8px;height:14px;border-radius:2px;z-index:50;pointer-events:none;animation:fall linear forwards}
 @media(min-width:721px){.row>div.n{background:var(--card);backdrop-filter:blur(6px)}}
 #oxmsg{display:none;margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--card);border:1px solid var(--bd);backdrop-filter:blur(8px);animation:rise .4s both}
-html{overflow-x:clip;overscroll-behavior-y:none}
+html{overflow-x:clip}
 .tools{display:flex;gap:8px}
 button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shadow:none}
 .modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));background:rgba(5,4,20,.72);backdrop-filter:blur(6px);animation:fade .25s both}
@@ -107,9 +107,12 @@ button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shado
 #howok{width:100%}
 details ul{margin:10px 0 0;padding-left:20px}
 details li{margin:7px 0;line-height:1.45}
+@media(max-width:720px){.row:not(.h)>div.n{border:0;background:none;box-shadow:none;backdrop-filter:none}}
+@media(max-width:720px){body{background:linear-gradient(to bottom,#371b7c 0,rgba(55,27,124,0) calc(env(safe-area-inset-top,0px) + 220px)),radial-gradient(ellipse 80% 50% at 15% -5%,#3b1a8a 0,transparent 60%),#0a0a1f;background-attachment:fixed}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
-<meta name="theme-color" content="#231250">
+<meta name="theme-color" content="#0a0a1f">
+<meta name="theme-color" content="#371b7c" media="(max-width:720px)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" type="image/png" href="favicon2.png">
@@ -191,7 +194,7 @@ Clonazepam (Klonopin)|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|3
 Diazepam (Valium)|-2|0|2|0|0|1|2|Benzodiazepine|GABAergic|1
 Lorazepam (Ativan)|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|2
 Midazolam|-2|0|2|0|0|1|1|Benzodiazepine|GABAergic|0
-Etizolam|-2|0|2|0|1|2|1|Benzodiazepine|GABAergic|0
+Etizolam|-2|0|2|0|1|2|1|Thienodiazepine|GABAergic|0
 Phenobarbital|-2|0|1|0|0|2|2|Barbiturate|GABAergic|3
 Gaboxadol|-2|1|0|1|1|0|1|Isoxazole|GABAergic|2
 Muscimol|-1|2|0|1|0|0|1|Isoxazole|GABAergic|2
@@ -245,7 +248,8 @@ Propylhexedrine|1|0|0|1|1|1|1|Cycloalkylamine|Monoamine releaser|0
 JWH-018|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid|1
 JWH-073|-1|1|2|0|1|2|1|Naphthoylindole|Cannabinoid|2
 Alkyl nitrates|-1|0|0|1|0|0|0|Nitrite ester|Vasodilator|2
-MDMA|2|1|0|1|0|1|1|Substituted amphetamine|Monoamine releaser|2`;
+MDMA|2|1|0|1|0|1|1|Substituted amphetamine|Monoamine releaser|2
+Ethanol (alcohol)|-1|0|0|0|0|1|1|Alcohol|GABAergic|1`;
 const D=RAW.split("\n").map(l=>{const p=l.split("|");return{name:p[0],ef:+p[1],hl:+p[2],sz:+p[3],n:p[4]=="1",ana:p[5]=="1",ad:+p[6],dur:+p[7],cls:p[8],mech:p[9],ox:+p[10]}});
 const DUR=["<1h","1–6h","6–12h+"],MAX=7;
 let target,guesses,over,isDaily=true;
@@ -276,10 +280,10 @@ function guess(){
     cell("Chemical class",g.cls,g.cls==target.cls),
     cell("Mechanism",g.mech,g.mech==target.mech));
   [...r.children].forEach((c,i)=>c.style.animationDelay=i*80+"ms");$("board").prepend(r);$("in").value="";upd();sugg();
-  if(g!=target&&["ef","hl","sz","n","ana","ad","dur","cls","mech"].every(k=>g[k]==target[k])){const o=$("oxmsg"),k=target.ox;o.textContent=`${k} oxygen atoms`;o.style.display="block"}
+  if(g!=target&&["ef","hl","sz","ad","dur","cls","mech"].every(k=>g[k]==target[k])){const o=$("oxmsg"),k=target.ox;o.textContent=`${k} oxygen atoms`;o.style.display="block"}
   if(g==target){r.classList.add("win");confetti();over=true;say(`🎉 Correct! It was <b>${target.name}</b>, found in ${guesses.length} guess${guesses.length>1?"es":""}.`)}
   else if(guesses.length>=MAX){over=true;say(`Out of guesses. The answer was <b>${target.name}</b> (${target.mech}).`)}
-  if(over){$("in").disabled=true;$("new").style.display="";if(isDaily)$("msg").innerHTML+="<br>That was today’s puzzle. A new one arrives tomorrow, or press Play again for a random one."}
+  if(over){$("in").disabled=true;$("new").style.display="";if(isDaily)$("msg").innerHTML+=" See you tomorrow."}
 }
 function confetti(){const c=["#a78bfa","#22d3ee","#10b981","#f472b6","#fbbf24"];for(let i=0;i<48;i++){const p=document.createElement("i");p.className="cf";p.style.cssText=`left:${Math.random()*100}vw;background:${c[i%5]};animation-delay:${Math.random()*.4}s;animation-duration:${1.6+Math.random()*1.4}s`;document.body.appendChild(p);setTimeout(()=>p.remove(),3500)}}
 function sugg(){const v=$("in").value.trim().toLowerCase(),s=$("sug");s.innerHTML="";if(!v)return;
