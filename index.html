@@ -111,12 +111,13 @@ details li{margin:7px 0;line-height:1.45}
 #topcap,#topfade,#botcap,#botfade{display:none}
 @media(max-width:720px){
 body::before,body::after{z-index:-2}
+:root{--ti:env(safe-area-inset-top,0px);--bi:env(safe-area-inset-bottom,0px)}
 body{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
 #topcap,#topfade,#botcap,#botfade{display:block;position:fixed;left:0;right:0;pointer-events:none}
 #topcap{top:0;height:calc(env(safe-area-inset-top,0px) + 8px);background:#371b7c;z-index:60}
-#topfade{top:0;height:calc(env(safe-area-inset-top,0px) + 260px);background:linear-gradient(to bottom,#371b7c 0,rgba(55,27,124,.55) 35%,rgba(55,27,124,0) 100%);z-index:-1}
+#topfade{top:0;height:calc(var(--ti) + 265px);background:linear-gradient(to bottom,#371b7c 0,#371b7c calc(var(--ti) + 28px),rgba(55,27,124,.85) calc(var(--ti) + 70px),rgba(55,27,124,.6) calc(var(--ti) + 115px),rgba(55,27,124,.36) calc(var(--ti) + 165px),rgba(55,27,124,.16) calc(var(--ti) + 215px),rgba(55,27,124,0) calc(var(--ti) + 265px));z-index:-1}
 #botcap{bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 8px);background:#0b5a78;z-index:60}
-#botfade{bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 260px);background:linear-gradient(to top,#0b5a78 0,rgba(11,90,120,.55) 35%,rgba(11,90,120,0) 100%);z-index:-1}
+#botfade{bottom:0;height:calc(var(--bi) + 210px);background:linear-gradient(to top,#0b5a78 0,#0b5a78 calc(var(--bi) + 36px),rgba(11,90,120,.85) calc(var(--bi) + 62px),rgba(11,90,120,.6) calc(var(--bi) + 95px),rgba(11,90,120,.36) calc(var(--bi) + 130px),rgba(11,90,120,.16) calc(var(--bi) + 168px),rgba(11,90,120,0) calc(var(--bi) + 205px));z-index:-1}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
@@ -196,8 +197,8 @@ Ibogaine (Iboga)|1|2|2|1|0|0|2|Indole alkaloid|Serotonergic|1
 2C-D|1|2|1|1|1|0|2|Phenethylamine|Serotonergic|2
 DOM|1|2|0|1|1|0|2|Substituted amphetamine|Serotonergic|2
 Bromo-DragonFLY|1|2|1|1|1|0|2|Benzodifuran|Serotonergic|2
-25C-NBOH|1|2|1|1|1|0|1|Phenethylamine|Serotonergic|3
-25C-NBOMe|1|2|1|1|1|0|2|Phenethylamine|Serotonergic|3
+25C-NBOH|1|2|1|1|1|0|1|N-benzyl phenethylamine|Serotonergic|3
+25C-NBOMe|1|2|1|1|1|0|2|N-benzyl phenethylamine|Serotonergic|3
 Alprazolam (Xanax)|-2|0|2|0|0|2|1|Benzodiazepine|GABAergic|0
 Clonazepam (Klonopin)|-2|0|2|0|0|2|2|Benzodiazepine|GABAergic|3
 Diazepam (Valium)|-2|0|2|0|0|1|2|Benzodiazepine|GABAergic|1
@@ -210,7 +211,7 @@ Muscimol|-1|2|0|1|0|0|1|Isoxazole|GABAergic|2
 Zolpidem|-2|0|2|0|0|1|1|Z-drug|GABAergic|1
 Zopiclone|-2|0|2|1|0|1|1|Z-drug|GABAergic|3
 Baclofen|-2|0|1|1|1|0|1|GABA analogue|GABAergic|2
-Phenibut|-2|0|1|1|1|2|2|GABA analogue|GABAergic|2
+Phenibut|-1|0|1|1|1|2|2|GABA analogue|GABAergic|2
 GHB|-1|0|0|0|0|2|1|Hydroxy acid|GABAergic|3
 GBL|-1|0|0|0|1|2|1|Lactone|GABAergic|2
 Kava|-1|0|1|0|0|0|1|Kavalactone|GABAergic|3
@@ -289,7 +290,7 @@ function guess(){
     cell("Chemical class",g.cls,g.cls==target.cls),
     cell("Mechanism",g.mech,g.mech==target.mech));
   [...r.children].forEach((c,i)=>c.style.animationDelay=i*80+"ms");$("board").prepend(r);$("in").value="";upd();sugg();
-  if(g!=target&&["ef","hl","sz","ad","dur","cls","mech"].every(k=>g[k]==target[k])){const o=$("oxmsg"),k=target.ox;o.textContent=`${k} oxygen atoms`;o.style.display="block"}
+  if(g!=target&&["ef","hl","sz","ad","dur","cls","mech"].every(k=>g[k]==target[k])){const o=$("oxmsg"),k=target.ox;o.textContent=`Hint: ${k} oxygen atom${k==1?"":"s"}`;o.style.display="block"}
   if(g==target){r.classList.add("win");confetti();over=true;say(`🎉 Correct! It was <b>${target.name}</b>, found in ${guesses.length} guess${guesses.length>1?"es":""}.`)}
   else if(guesses.length>=MAX){over=true;say(`Out of guesses. The answer was <b>${target.name}</b> (${target.mech}).`)}
   if(over){$("in").disabled=true;$("new").style.display="";if(isDaily)$("msg").innerHTML+=" See you tomorrow."}
