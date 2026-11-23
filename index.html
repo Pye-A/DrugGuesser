@@ -108,14 +108,14 @@ button.priv{padding:0;font-size:1.15rem;font-weight:800;cursor:pointer;box-shado
 details ul{margin:10px 0 0;padding-left:20px}
 details li{margin:7px 0;line-height:1.45}
 @media(max-width:720px){.row:not(.h)>div.n{border:0;background:none;box-shadow:none;backdrop-filter:none}}
-#topcap,#topfade,#botcap,#botfade{display:none}
+#topcap,#topfade,#botcap,#botfade{bottom:0;height:calc(var(--bi) + 251px);background:linear-gradient(to top,#0b5a78 0,#0b5a78 calc(var(--bi) + 36px),rgba(11,90,120,0.987) calc(var(--bi) + 51px),rgba(11,90,120,0.950) calc(var(--bi) + 67px),rgba(11,90,120,0.891) calc(var(--bi) + 82px),rgba(11,90,120,0.812) calc(var(--bi) + 97px),rgba(11,90,120,0.717) calc(var(--bi) + 113px),rgba(11,90,120,0.611) calc(var(--bi) + 128px),rgba(11,90,120,0.500) calc(var(--bi) + 144px),rgba(11,90,120,0.389) calc(var(--bi) + 159px),rgba(11,90,120,0.283) calc(var(--bi) + 174px),rgba(11,90,120,0.188) calc(var(--bi) + 190px),rgba(11,90,120,0.109) calc(var(--bi) + 205px),rgba(11,90,120,0.050) calc(var(--bi) + 220px),rgba(11,90,120,0.013) calc(var(--bi) + 236px),rgba(11,90,120,0.000) calc(var(--bi) + 251px));z-index:-1}
 @media(max-width:720px){
 body::before,body::after{z-index:-2}
 :root{--ti:env(safe-area-inset-top,0px);--bi:env(safe-area-inset-bottom,0px)}
 body{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
 #topcap,#topfade,#botcap,#botfade{display:block;position:fixed;left:0;right:0;pointer-events:none}
 #topcap{top:0;height:calc(env(safe-area-inset-top,0px) + 8px);background:#371b7c;z-index:60}
-#topfade{top:0;height:calc(var(--ti) + 265px);background:linear-gradient(to bottom,#371b7c 0,#371b7c calc(var(--ti) + 28px),rgba(55,27,124,.85) calc(var(--ti) + 70px),rgba(55,27,124,.6) calc(var(--ti) + 115px),rgba(55,27,124,.36) calc(var(--ti) + 165px),rgba(55,27,124,.16) calc(var(--ti) + 215px),rgba(55,27,124,0) calc(var(--ti) + 265px));z-index:-1}
+#topfade{top:0;height:calc(var(--ti) + 318px);background:linear-gradient(to bottom,#371b7c 0,#371b7c calc(var(--ti) + 28px),rgba(55,27,124,0.987) calc(var(--ti) + 49px),rgba(55,27,124,0.950) calc(var(--ti) + 69px),rgba(55,27,124,0.891) calc(var(--ti) + 90px),rgba(55,27,124,0.812) calc(var(--ti) + 111px),rgba(55,27,124,0.717) calc(var(--ti) + 132px),rgba(55,27,124,0.611) calc(var(--ti) + 152px),rgba(55,27,124,0.500) calc(var(--ti) + 173px),rgba(55,27,124,0.389) calc(var(--ti) + 194px),rgba(55,27,124,0.283) calc(var(--ti) + 214px),rgba(55,27,124,0.188) calc(var(--ti) + 235px),rgba(55,27,124,0.109) calc(var(--ti) + 256px),rgba(55,27,124,0.050) calc(var(--ti) + 277px),rgba(55,27,124,0.013) calc(var(--ti) + 297px),rgba(55,27,124,0.000) calc(var(--ti) + 318px));z-index:-1}
 #botcap{bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 8px);background:#0b5a78;z-index:60}
 #botfade{bottom:0;height:calc(var(--bi) + 210px);background:linear-gradient(to top,#0b5a78 0,#0b5a78 calc(var(--bi) + 36px),rgba(11,90,120,.85) calc(var(--bi) + 62px),rgba(11,90,120,.6) calc(var(--bi) + 95px),rgba(11,90,120,.36) calc(var(--bi) + 130px),rgba(11,90,120,.16) calc(var(--bi) + 168px),rgba(11,90,120,0) calc(var(--bi) + 205px));z-index:-1}
 }
@@ -151,7 +151,7 @@ body{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
 </head><body><div id="topcap" aria-hidden="true"></div><div id="topfade" aria-hidden="true"></div><div id="botfade" aria-hidden="true"></div><div id="botcap" aria-hidden="true"></div><main>
 <header class="top"><h1>💊 Drug Guesser</h1><div class="tools"><button class="priv" id="help" aria-label="How to play" title="How to play">?</button><button class="priv" id="share" aria-label="Share" title="Share"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg></button><a class="priv" href="privacy.html" aria-label="Privacy policy" title="Privacy policy"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8.4-8 9-4.8-.6-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></a></div></header>
 <div class="sub">Guess the mystery drug. Educational purposes only.</div>
-<div class="bar"><input id="in" placeholder="Type a substance name…" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Guess</button><button class="alt" id="new">New game</button></div>
+<div class="bar"><input id="in" placeholder="Type a substance name…" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Guess</button><button class="alt" id="new">Play again</button></div>
 <div id="oxmsg"></div><div id="sug"></div>
 <div class="meta"><span id="left"></span><span id="flags"></span><span class="key"><span style="background:var(--ok)"></span>match<span style="background:var(--no)"></span>no match</span></div>
 <div id="msg"></div>
@@ -179,7 +179,7 @@ body{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
 <li>Type a substance name and press Guess (or Enter). Suggestions appear as you type.</li>
 <li>Each guess shows how it compares: green tiles match the mystery drug, gray tiles don’t.</li>
 <li>After your first guess, two small squares show whether the mystery drug has a basic nitrogen and whether it’s an analogue (green = yes, gray = no).</li>
-<li>A new daily puzzle arrives each day. When you finish, press New game for a random one.</li>
+<li>A new daily puzzle arrives each day. When you finish, press Play again for a random one.</li>
 <li>For education only. This isn’t drug-use advice.</li>
 </ul>
 <button id="howok">Got it</button>
@@ -280,6 +280,7 @@ const D=RAW.split("\n").map(l=>{const p=l.split("|");return{name:p[0],ef:+p[1],h
 const DUR=["<1h","1–6h","6–12h+"],MAX=7;
 let target,guesses,over,isDaily=true,dres=null,rows=[],tm;
 const SITE="https://drugguesser.lol/";
+function dayKey(){const n=new Date();return n.getFullYear()+"-"+(n.getMonth()+1)+"-"+n.getDate()}
 const $=id=>document.getElementById(id);
 function dailyIndex(){const n=new Date(),s=n.getFullYear()+"-"+(n.getMonth()+1)+"-"+n.getDate();let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}let t=(h>>>0)+0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)%D.length}
 function start(daily){rows=[];clearTimeout(tm);isDaily=!!daily;target=isDaily?D[dailyIndex()]:D[Math.floor(Math.random()*D.length)];$("new").style.display="none";guesses=[];over=false;$("board").innerHTML="";$("oxmsg").style.display="none";$("msg").style.display="none";$("in").value="";$("in").disabled=false;upd();sugg()}
@@ -311,7 +312,7 @@ function guess(){
   if(g!=target&&["ef","hl","sz","ad","dur","cls","mech"].every(k=>g[k]==target[k])){const o=$("oxmsg"),k=target.ox;o.textContent=`Hint: ${k} oxygen atom${k==1?"":"s"}`;o.style.display="block"}
   if(g==target){r.classList.add("win");confetti();over=true;say(`🎉 Correct! It was <b>${target.name}</b>, found in ${guesses.length} guess${guesses.length>1?"es":""}.`)}
   else if(guesses.length>=MAX){over=true;say(`Out of guesses. The answer was <b>${target.name}</b> (${target.mech}).`)}
-  if(over){$("in").disabled=true;$("new").style.display="";if(isDaily){$("msg").innerHTML+=" See you tomorrow.";dres={win:g==target,n:guesses.length,rows:rows.slice()};clearTimeout(tm);tm=setTimeout(()=>{if(over&&isDaily&&how.hidden)openShare()},2000)}}
+  if(over){$("in").disabled=true;$("new").style.display="";if(isDaily){$("msg").innerHTML+=" See you tomorrow.";dres={day:dayKey(),win:g==target,n:guesses.length,rows:rows.slice().reverse()};clearTimeout(tm);tm=setTimeout(()=>{if(over&&isDaily&&how.hidden)openShare()},2000)}}
 }
 function confetti(){const c=["#a78bfa","#22d3ee","#10b981","#f472b6","#fbbf24"];for(let i=0;i<48;i++){const p=document.createElement("i");p.className="cf";p.style.cssText=`left:${Math.random()*100}vw;background:${c[i%5]};animation-delay:${Math.random()*.4}s;animation-duration:${1.6+Math.random()*1.4}s`;document.body.appendChild(p);setTimeout(()=>p.remove(),3500)}}
 function sugg(){const v=$("in").value.trim().toLowerCase(),s=$("sug");s.innerHTML="";if(!v)return;
@@ -328,17 +329,17 @@ how.addEventListener("click",e=>{if(e.target===how)closeHow()});
 document.addEventListener("keydown",e=>{if(e.key=="Escape"&&!how.hidden)closeHow()});
 try{if(!localStorage.getItem("dg_seen"))openHow()}catch(e){openHow()}
 const shr=$("shr");
-function shareMsg(){return dres?`My score on Drug Guesser today: ${dres.win?dres.n:"X"}/${MAX}\n`+dres.rows.join("\n"):null}
+function shareMsg(){if(dres&&dres.day!==dayKey())dres=null;return dres?`My score on Drug Guesser today: ${dres.win?dres.n:"X"}/${MAX}\n`+dres.rows.join("\n"):null}
 function fallbackCopy(t){try{const a=document.createElement("textarea");a.value=t;a.style.cssText="position:fixed;opacity:0";document.body.appendChild(a);a.select();const ok=document.execCommand("copy");a.remove();return ok}catch(e){return false}}
 function copyText(t){if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(t).then(()=>true,()=>fallbackCopy(t));return Promise.resolve(fallbackCopy(t))}
 function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),2400)}
 async function doShare(){
-  const m=shareMsg(),text=m||"Guess the mystery drug in Drug Guesser.";
+  const m=shareMsg(),text=m||"Guess the mystery drug in Drug Guesser, a free daily puzzle.";
   if(navigator.share&&matchMedia("(pointer:coarse)").matches){try{await navigator.share({title:"Drug Guesser",text,url:SITE});return}catch(e){if(e&&e.name=="AbortError")return}}
   const ok=await copyText((m?m+"\n":"")+SITE);
   toast(ok?(m?"Result and link copied":"Link copied"):"Couldn’t copy – link: "+SITE)
 }
-function openShare(){if(!dres)return;$("shrscore").textContent=`My score on Drug Guesser today: ${dres.win?dres.n:"X"}/${MAX}`;$("shrgrid").textContent=dres.rows.join("\n");shr.hidden=false;document.body.style.overflow="hidden";$("shrbtn").focus()}
+function openShare(){if(dres&&dres.day!==dayKey())dres=null;if(!dres)return;$("shrscore").textContent=`My score on Drug Guesser today: ${dres.win?dres.n:"X"}/${MAX}`;$("shrgrid").textContent=dres.rows.join("\n");shr.hidden=false;document.body.style.overflow="hidden";$("shrbtn").focus()}
 function closeShare(){shr.hidden=true;document.body.style.overflow=""}
 $("share").onclick=doShare;$("shrbtn").onclick=doShare;$("shrx").onclick=closeShare;$("shrclose").onclick=closeShare;
 shr.addEventListener("click",e=>{if(e.target===shr)closeShare()});
