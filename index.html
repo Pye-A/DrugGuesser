@@ -333,7 +333,7 @@ function fallbackCopy(t){try{const a=document.createElement("textarea");a.value=
 function copyText(t){if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(t).then(()=>true,()=>fallbackCopy(t));return Promise.resolve(fallbackCopy(t))}
 function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),2400)}
 async function doShare(){
-  const m=shareMsg(),text=m||"Guess the mystery drug in Drug Guesser, a free daily puzzle.";
+  const m=shareMsg(),text=m||"Guess the mystery drug in Drug Guesser.";
   if(navigator.share&&matchMedia("(pointer:coarse)").matches){try{await navigator.share({title:"Drug Guesser",text,url:SITE});return}catch(e){if(e&&e.name=="AbortError")return}}
   const ok=await copyText((m?m+"\n":"")+SITE);
   toast(ok?(m?"Result and link copied":"Link copied"):"Couldn’t copy – link: "+SITE)
